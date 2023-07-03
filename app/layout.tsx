@@ -1,7 +1,7 @@
 import './globals.css';
 import { Nunito } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
-import { ModalProviders } from './shared/components/providers';
+import { ModalProviders, ToastProvider } from './shared/components/providers';
 
 const nunito = Nunito({ subsets: ['latin'] });
 
@@ -16,6 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <html lang='en'>
         <body className={nunito.className}>
           <ModalProviders />
+          <ToastProvider />
           {children}
         </body>
       </html>

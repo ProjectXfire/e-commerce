@@ -3,6 +3,7 @@
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
 import { useModal } from '../../hooks';
 import {
   Form,
@@ -15,6 +16,8 @@ import {
   Button,
   FormMessage
 } from '../ui';
+import { createStore } from '@/app/(root)/services';
+import { toast } from 'react-hot-toast';
 
 const formSchema = z.object({
   name: z.string().min(1)
@@ -22,13 +25,22 @@ const formSchema = z.object({
 
 function StoreModal(): JSX.Element {
   const { isOpen, onClose } = useModal();
+  const [isloading, setIsloading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: { name: '' },
     resolver: zodResolver(formSchema)
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setIsloading(true);
+    const { name } = values;
+    const { errorMessage, message } = await createStore(name);
+    if (errorMessage) {
+      toast.error(errorMessage);
+    } else {
+      toast.success(message);
+    }
+    setIsloading(false);
   };
 
   return (
@@ -48,17 +60,19 @@ function StoreModal(): JSX.Element {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder='E-Commerce' {...field} />
+                    <Input disabled={isloading} placeholder='E-Commerce' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <div className='pt-6 space-x-2 flex items-center justify-end w-full'>
-              <Button type='button' variant='outline' onClick={onClose}>
+              <Button disabled={isloading} type='button' variant='outline' onClick={onClose}>
                 Cancel
               </Button>
-              <Button type='submit'>Continue</Button>
+              <Button disabled={isloading} type='submit'>
+                Continue
+              </Button>
             </div>
           </form>
         </Form>
