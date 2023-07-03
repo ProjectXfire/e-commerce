@@ -1,9 +1,20 @@
-import { UserButton } from '@clerk/nextjs';
+'use client';
 
-export default function SetupPage() {
+import { useEffect } from 'react';
+import { useModal } from '../shared/hooks';
+
+export default function SetupPage(): JSX.Element {
+  const { isOpen, onOpen } = useModal();
+
+  useEffect(() => {
+    if (!isOpen) {
+      onOpen();
+    }
+  }, [isOpen, onOpen]);
+
   return (
     <section className='p-4'>
-      <UserButton afterSignOutUrl='/' />
+      <h1>Root Page</h1>
     </section>
   );
 }
