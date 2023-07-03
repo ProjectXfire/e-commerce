@@ -22,7 +22,7 @@ function Modal({ title, description, isOpen, onClose, children }: Props): JSX.El
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-        <div>{children}</div>
+        {children}
       </DialogContent>
     </Dialog>
   );
