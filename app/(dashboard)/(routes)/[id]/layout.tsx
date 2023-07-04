@@ -2,6 +2,7 @@ import { type ReactNode } from 'react';
 import { redirect } from 'next/navigation';
 import { auth } from '@clerk/nextjs';
 import prismaDb from '@/lib/prismadb';
+import { Navbar } from '../../components';
 
 interface IParams {
   id: string;
@@ -23,7 +24,7 @@ export default async function DashboardLayout({ children, params }: Props): Prom
 
   return (
     <>
-      <nav>Navbar</nav>
+      <Navbar />
       {children}
     </>
   );
