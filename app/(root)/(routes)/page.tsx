@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useModal } from '../shared/hooks';
+import { useModal } from '../../shared/hooks';
 
 export default function SetupPage(): JSX.Element {
   const { isOpen, onOpen } = useModal();
@@ -12,9 +12,5 @@ export default function SetupPage(): JSX.Element {
     }
   }, [isOpen, onOpen]);
 
-  return (
-    <section className='p-4'>
-      <h1>Root Page</h1>
-    </section>
-  );
+  return <></>;
 }

@@ -1,7 +1,7 @@
+import { NextResponse } from 'next/server';
 import prismaDb from '@/lib/prismadb';
 import { auth } from '@clerk/nextjs';
-import { NextResponse } from 'next/server';
-import { IStore } from '@/app/(root)/models';
+import { IStore } from '@/app/core/interfaces';
 
 interface ReturnStore<T> {
   message: string | null;
@@ -10,7 +10,6 @@ interface ReturnStore<T> {
 }
 
 export async function POST(req: Request): Promise<NextResponse<ReturnStore<IStore | null>>> {
-  console.log('entra el post');
   try {
     const { userId } = auth();
     if (!userId)
