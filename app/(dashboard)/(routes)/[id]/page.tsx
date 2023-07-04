@@ -1,11 +1,8 @@
 import prismaDb from '@/lib/prismadb';
+import { type IParams } from '@/app/shared/interfaces';
 
 interface Props {
   params: IParams;
-}
-
-interface IParams {
-  id: string;
 }
 
 async function DashboardPage({ params }: Props): Promise<JSX.Element> {

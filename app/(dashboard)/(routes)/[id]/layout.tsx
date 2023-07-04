@@ -2,11 +2,8 @@ import { type ReactNode } from 'react';
 import { redirect } from 'next/navigation';
 import { auth } from '@clerk/nextjs';
 import prismaDb from '@/lib/prismadb';
+import { type IParams } from '@/app/shared/interfaces';
 import { Navbar } from '../../components';
-
-interface IParams {
-  id: string;
-}
 
 interface Props {
   children: ReactNode;

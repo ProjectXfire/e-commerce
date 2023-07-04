@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { IResponse } from '@/app/shared/interfaces';
-import { IStore } from '@/app/core/interfaces';
+import { type IResponse } from '@/app/shared/interfaces';
+import { type IStore } from '@/app/core/interfaces';
 
 export async function createStore(name: string): Promise<IResponse<IStore | null>> {
   try {
