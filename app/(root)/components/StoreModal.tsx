@@ -1,10 +1,11 @@
 'use client';
 
+import { useState } from 'react';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
-import { useModal } from '../../hooks';
+import { toast } from 'react-hot-toast';
+import { useModal } from '@/app/shared/hooks';
 import {
   Form,
   FormField,
@@ -15,9 +16,8 @@ import {
   Input,
   Button,
   FormMessage
-} from '../ui';
+} from '@/app/shared/components/ui';
 import { createStore } from '@/app/(root)/services';
-import { toast } from 'react-hot-toast';
 
 const formSchema = z.object({
   name: z.string().min(1)
@@ -34,11 +34,12 @@ function StoreModal(): JSX.Element {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsloading(true);
     const { name } = values;
-    const { errorMessage, message } = await createStore(name);
+    const { errorMessage, message, data } = await createStore(name);
     if (errorMessage) {
       toast.error(errorMessage);
     } else {
       toast.success(message);
+      window.location.assign(`/${data?.id}`);
     }
     setIsloading(false);
   };

@@ -1,8 +1,8 @@
-import { IResponse } from '@/app/shared/interfaces';
 import axios from 'axios';
-import { IStore } from '../models';
+import { IResponse } from '@/app/shared/interfaces';
+import { IStore } from '@/app/core/interfaces';
 
-export async function createStore(name: string): Promise<IResponse<any>> {
+export async function createStore(name: string): Promise<IResponse<IStore | null>> {
   try {
     const res = await axios.post<IResponse<IStore | null>>('/api/stores', { name });
     const { data, errorMessage, message } = res.data;
