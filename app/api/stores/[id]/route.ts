@@ -65,7 +65,7 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (error) {
-    console.error(`[STORES_PATCH]: ${error}`);
+    console.error(`[STORES_DELETE]: ${error}`);
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2014') {
         return NextResponse.json(

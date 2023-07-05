@@ -12,3 +12,4 @@ export * from './Popover';
 export * from './Alert';
 export { default as ApiAlert } from './ApiAlert';
 export * from './Badge';
+export { default as ImageUpload } from './ImageUpload';

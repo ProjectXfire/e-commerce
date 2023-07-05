@@ -13,7 +13,12 @@ function MainNavbar({ className, ...props }: React.HtmlHTMLAttributes<HTMLElemen
     {
       href: `/${params.id}`,
       label: 'Overview',
-      active: pathname === `/${params.id}/settings`
+      active: pathname === `/${params.id}`
+    },
+    {
+      href: `/${params.id}/billboards`,
+      label: 'Billboards',
+      active: pathname === `/${params.id}/billboards`
     },
     {
       href: `/${params.id}/settings`,
