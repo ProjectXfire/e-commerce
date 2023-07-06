@@ -8,11 +8,9 @@ import { useForm } from 'react-hook-form';
 import { Trash } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { removeImage, deleteBillboard, createBillboard } from '../services';
-import { useOrigin } from '@/app/shared/hooks';
 import { type IBillboard } from '@/app/core/interfaces';
 import {
   AlertModal,
-  ApiAlert,
   Button,
   Divider,
   Form,
@@ -37,7 +35,6 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 function BillboardsForm({ billboard }: Props): JSX.Element {
-  const origin = useOrigin();
   const router = useRouter();
   const params = useParams();
 
@@ -156,11 +153,6 @@ function BillboardsForm({ billboard }: Props): JSX.Element {
         </form>
       </Form>
       <Divider />
-      <ApiAlert
-        title='NEXT_PUBLIC_API_URL'
-        description={`${origin}/api/${billboard?.id}`}
-        variant='public'
-      />
     </>
   );
 }

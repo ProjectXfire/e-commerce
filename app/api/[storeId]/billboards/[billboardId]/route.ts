@@ -2,12 +2,12 @@ import { NextResponse } from 'next/server';
 import { Prisma } from '@prisma/client';
 import { auth } from '@clerk/nextjs';
 import prismaDb from '@/lib/prismadb';
-import { type IResponse } from '@/app/shared/interfaces';
+import { type IParams, type IResponse } from '@/app/shared/interfaces';
 import { type IBillboard } from '@/app/core/interfaces';
 
 export async function GET(
   req: Request,
-  { params }: { params: { billboardId: string } }
+  { params }: { params: IParams }
 ): Promise<NextResponse<IResponse<IBillboard | null>>> {
   try {
     const { billboardId } = params;
@@ -32,7 +32,7 @@ export async function GET(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { storeId: string; billboardId: string } }
+  { params }: { params: IParams }
 ): Promise<NextResponse<IResponse<null>>> {
   try {
     const { userId } = auth();
@@ -79,7 +79,7 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { storeId: string; billboardId: string } }
+  { params }: { params: IParams }
 ): Promise<NextResponse<IResponse<null>>> {
   try {
     const { userId } = auth();

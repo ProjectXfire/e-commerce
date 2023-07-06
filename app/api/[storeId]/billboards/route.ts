@@ -2,11 +2,11 @@ import { NextResponse } from 'next/server';
 import prismaDb from '@/lib/prismadb';
 import { auth } from '@clerk/nextjs';
 import { type IBillboard } from '@/app/core/interfaces';
-import { type IResponse } from '@/app/shared/interfaces';
+import { type IParams, type IResponse } from '@/app/shared/interfaces';
 
 export async function POST(
   req: Request,
-  { params }: { params: { storeId: string } }
+  { params }: { params: IParams }
 ): Promise<NextResponse<IResponse<IBillboard | null>>> {
   try {
     const { userId } = auth();
@@ -63,7 +63,7 @@ export async function GET(
       );
     const billboards = await prismaDb.billboard.findMany({ where: { storeId } });
     return NextResponse.json(
-      { message: 'Billboard created successfully', errorMessage: null, data: billboards },
+      { message: 'List gotten successfully', errorMessage: null, data: billboards },
       { status: 201 }
     );
   } catch (error: any) {

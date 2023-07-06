@@ -1,3 +1,5 @@
 export interface IParams {
-  id: string;
+  id?: string;
+  billboardId?: string;
+  storeId?: string;
 }

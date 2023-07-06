@@ -4,4 +4,5 @@ export interface IBillboard {
   imageUrl: string;
   imageCode: string;
   storeId: string;
+  createdAt: string | Date;
 }
