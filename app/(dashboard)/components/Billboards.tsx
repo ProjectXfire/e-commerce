@@ -5,7 +5,7 @@ import { Plus } from 'lucide-react';
 import { type ColumnDef } from '@tanstack/react-table';
 import { type IBillboard } from '@/app/core/interfaces';
 import { ApiList, Button, DataTable, Divider, Heading } from '@/app/shared/components/ui';
-import BillboardCellAction from './BillboardCellAction';
+import CellAction from './CellAction';
 
 interface Props {
   billboards: IBillboard[];
@@ -22,7 +22,7 @@ export const billboardColumn: ColumnDef<IBillboard>[] = [
   },
   {
     id: 'actions',
-    cell: ({ row }) => <BillboardCellAction data={row.original} />
+    cell: ({ row }) => <CellAction data={row.original} paramKey='billboards' />
   }
 ];
 

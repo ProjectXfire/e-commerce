@@ -1,5 +1,5 @@
-import { BillboardsForm } from '@/app/(dashboard)/components';
-import { IParams } from '@/app/shared/interfaces';
+import { SizesForms } from '@/app/(dashboard)/components';
+import { type IParams } from '@/app/shared/interfaces';
 import prismaDb from '@/lib/prismadb';
 
 interface Props {
@@ -7,11 +7,11 @@ interface Props {
 }
 
 async function BillboardNewPage({ params }: Props): Promise<JSX.Element> {
-  const billboard = await prismaDb.billboard.findUnique({ where: { id: params.billboardId } });
+  const size = await prismaDb.size.findUnique({ where: { id: params.sizeId } });
 
   return (
     <div className='flex-col flex-1 space-y-4 p-8 pt-6'>
-      <BillboardsForm billboard={billboard} />
+      <SizesForms size={size} />
     </div>
   );
 }
