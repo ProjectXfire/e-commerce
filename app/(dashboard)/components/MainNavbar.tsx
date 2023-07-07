@@ -29,6 +29,16 @@ function MainNavbar({ className, ...props }: React.HtmlHTMLAttributes<HTMLElemen
       active: pathname === `/${params.id}/categories`
     },
     {
+      value: `/${params.id}/sizes`,
+      label: 'Sizes',
+      active: pathname === `/${params.id}/sizes`
+    },
+    {
+      value: `/${params.id}/colors`,
+      label: 'Colors',
+      active: pathname === `/${params.id}/colors`
+    },
+    {
       value: `/${params.id}/settings`,
       label: 'Settings',
       active: pathname === `/${params.id}/settings`

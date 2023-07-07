@@ -34,11 +34,11 @@ export async function POST(
         { message: null, errorMessage: 'Some fields are missing', data: null },
         { status: 400 }
       );
-    const store = await prismaDb.billboard.create({
+    const billboard = await prismaDb.billboard.create({
       data: { imageCode, imageUrl, label, storeId }
     });
     return NextResponse.json(
-      { message: 'Billboard created successfully', errorMessage: null, data: store },
+      { message: 'Billboard created successfully', errorMessage: null, data: billboard },
       { status: 201 }
     );
   } catch (error: any) {

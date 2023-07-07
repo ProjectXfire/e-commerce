@@ -1,17 +1,17 @@
-import { BillboardsForm } from '@/app/(dashboard)/components';
-import { IParams } from '@/app/shared/interfaces';
 import prismaDb from '@/lib/prismadb';
+import { type IParams } from '@/app/shared/interfaces';
+import ColorForm from '@/app/(dashboard)/components/ColorForms';
 
 interface Props {
   params: IParams;
 }
 
 async function BillboardNewPage({ params }: Props): Promise<JSX.Element> {
-  const billboard = await prismaDb.billboard.findUnique({ where: { id: params.billboardId } });
+  const color = await prismaDb.color.findUnique({ where: { id: params.colorId } });
 
   return (
     <div className='flex-col flex-1 space-y-4 p-8 pt-6'>
-      <BillboardsForm billboard={billboard} />
+      <ColorForm color={color} />
     </div>
   );
 }

@@ -3,4 +3,6 @@ export interface IParams {
   billboardId?: string;
   storeId?: string;
   categoryId?: string;
+  sizeId?: string;
+  colorId?: string;
 }

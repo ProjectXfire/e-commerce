@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import { Copy, Edit, MoreHorizontal, Trash } from 'lucide-react';
-import { deleteCategory } from '@/app/(dashboard)/services';
-import { type ICategory } from '@/app/core/interfaces';
+import { deleteBillboard, deleteCategory, deleteSize } from '@/app/(dashboard)/services';
+import { type IBillboard, type ISize, type ICategory } from '@/app/core/interfaces';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -15,12 +15,14 @@ import {
   Button,
   AlertModal
 } from '@/app/shared/components/ui';
+import { deleteColor } from '../services/Color';
 
 interface Props {
-  data: ICategory;
+  data: ICategory | IBillboard | ISize;
+  paramKey: 'categories' | 'billboards' | 'sizes' | 'colors';
 }
 
-function CategoryCellAction({ data }: Props): JSX.Element {
+function CellAction({ data, paramKey }: Props): JSX.Element {
   const router = useRouter();
   const params = useParams();
 
@@ -33,16 +35,37 @@ function CategoryCellAction({ data }: Props): JSX.Element {
   };
 
   const onUpdate = (): void => {
-    router.push(`/${params.id}/categories/${data.id}`);
+    router.push(`/${params.id}/${paramKey}/${data.id}`);
   };
 
   const onDelete = async () => {
     setLoading(true);
-    const { errorMessage, message } = await deleteCategory(params.id, data.id);
-    if (errorMessage) {
-      toast.error(errorMessage);
+    let _errorMessage = null;
+    let _message = null;
+    if (paramKey === 'billboards') {
+      const res = await deleteBillboard(params.id, data.id);
+      _errorMessage = res.errorMessage;
+      _message = res.message;
+    }
+    if (paramKey === 'categories') {
+      const res = await deleteCategory(params.id, data.id);
+      _errorMessage = res.errorMessage;
+      _message = res.message;
+    }
+    if (paramKey === 'sizes') {
+      const res = await deleteSize(params.id, data.id);
+      _errorMessage = res.errorMessage;
+      _message = res.message;
+    }
+    if (paramKey === 'colors') {
+      const res = await deleteColor(params.id, data.id);
+      _errorMessage = res.errorMessage;
+      _message = res.message;
+    }
+    if (_errorMessage) {
+      toast.error(_errorMessage);
     } else {
-      toast.success(message);
+      toast.success(_message);
       router.refresh();
     }
     setLoading(false);
@@ -81,4 +104,4 @@ function CategoryCellAction({ data }: Props): JSX.Element {
     </>
   );
 }
-export default CategoryCellAction;
+export default CellAction;
