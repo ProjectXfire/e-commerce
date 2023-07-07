@@ -1,5 +1,6 @@
 import axios, { type AxiosResponse } from 'axios';
 import { type IResponse } from '@/app/shared/interfaces';
+import { type IBillboard } from '@/app/core/interfaces';
 import { type UpsertBillboardDto } from '../dtos';
 
 export async function removeImage(secure_url: string, public_id: string): Promise<IResponse<any>> {
@@ -22,7 +23,7 @@ export async function removeImage(secure_url: string, public_id: string): Promis
   }
 }
 
-export async function createBillboard(
+export async function upsertBillboard(
   id: string,
   payload: UpsertBillboardDto
 ): Promise<IResponse<null>> {

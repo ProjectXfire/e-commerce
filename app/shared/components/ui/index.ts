@@ -16,5 +16,6 @@ export { default as ImageUpload } from './ImageUpload';
 export * from './Table';
 export { default as DataTable } from './DataTable';
 export * from './DropdownMenu';
-export { default as CellAction } from './CellAction';
 export { default as ApiList } from './ApiList';
+export { default as CustomDropdownMenu } from './CustomDropdownMenu';
+export * from './Select';

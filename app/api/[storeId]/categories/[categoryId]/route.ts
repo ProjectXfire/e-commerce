@@ -3,26 +3,26 @@ import { Prisma } from '@prisma/client';
 import { auth } from '@clerk/nextjs';
 import prismaDb from '@/lib/prismadb';
 import { type IParams, type IResponse } from '@/app/shared/interfaces';
-import { type IBillboard } from '@/app/core/interfaces';
+import { type ICategory } from '@/app/core/interfaces';
 
 export async function GET(
   req: Request,
   { params }: { params: IParams }
-): Promise<NextResponse<IResponse<IBillboard | null>>> {
+): Promise<NextResponse<IResponse<ICategory | null>>> {
   try {
-    const { billboardId } = params;
-    if (!billboardId)
+    const { categoryId } = params;
+    if (!categoryId)
       return NextResponse.json(
-        { message: null, errorMessage: 'Billboard ID is required', data: null },
+        { message: null, errorMessage: 'Category ID is required', data: null },
         { status: 400 }
       );
-    const billboard = await prismaDb.billboard.findUnique({ where: { id: billboardId } });
+    const category = await prismaDb.category.findUnique({ where: { id: categoryId } });
     return NextResponse.json(
-      { message: 'Billboard gotten successfully', errorMessage: null, data: billboard },
+      { message: 'Category gotten successfully', errorMessage: null, data: category },
       { status: 200 }
     );
   } catch (error) {
-    console.error(`[BILLBOARD_GET]: ${error}`);
+    console.error(`[CATEGORY_GET]: ${error}`);
     return NextResponse.json(
       { message: null, errorMessage: 'Something get wrong!', data: null },
       { status: 500 }
@@ -41,10 +41,10 @@ export async function PATCH(
         { message: null, errorMessage: 'Unauthorized', data: null },
         { status: 401 }
       );
-    const { billboardId, storeId } = params;
-    if (!billboardId || !storeId)
+    const { categoryId, storeId } = params;
+    if (!categoryId || !storeId)
       return NextResponse.json(
-        { message: null, errorMessage: 'Store and billboard ID are required', data: null },
+        { message: null, errorMessage: 'Store and category ID are required', data: null },
         { status: 400 }
       );
     const isStoreFromUser = await prismaDb.store.findFirst({ where: { userId, id: storeId } });
@@ -54,22 +54,22 @@ export async function PATCH(
         { status: 400 }
       );
     const body = await req.json();
-    const { label, imageUrl, imageCode } = body;
-    if (!label || !imageUrl || !imageCode)
+    const { name, billboardId } = body;
+    if (!name || !billboardId)
       return NextResponse.json(
         { message: null, errorMessage: 'Some fields are missing', data: null },
         { status: 400 }
       );
-    await prismaDb.billboard.updateMany({
-      where: { id: billboardId },
-      data: { label, imageCode, imageUrl }
+    await prismaDb.category.updateMany({
+      where: { id: categoryId },
+      data: { name, billboardId }
     });
     return NextResponse.json(
-      { message: 'Billboard updated successfully', errorMessage: null, data: null },
+      { message: 'Category updated successfully', errorMessage: null, data: null },
       { status: 200 }
     );
   } catch (error) {
-    console.error(`[BILLBOARD_PATCH]: ${error}`);
+    console.error(`[CATEGORY_PATCH]: ${error}`);
     return NextResponse.json(
       { message: null, errorMessage: 'Something get wrong!', data: null },
       { status: 500 }
@@ -88,10 +88,10 @@ export async function DELETE(
         { message: null, errorMessage: 'Unauthorized', data: null },
         { status: 401 }
       );
-    const { billboardId, storeId } = params;
-    if (!billboardId || !storeId)
+    const { categoryId, storeId } = params;
+    if (!categoryId || !storeId)
       return NextResponse.json(
-        { message: null, errorMessage: 'Store and billboard ID are required', data: null },
+        { message: null, errorMessage: 'Store and category ID are required', data: null },
         { status: 400 }
       );
     const isStoreFromUser = await prismaDb.store.findFirst({ where: { userId, id: storeId } });
@@ -100,19 +100,19 @@ export async function DELETE(
         { message: null, errorMessage: 'Unauthorized store', data: null },
         { status: 400 }
       );
-    await prismaDb.billboard.deleteMany({ where: { id: billboardId } });
+    await prismaDb.category.deleteMany({ where: { id: categoryId } });
     return NextResponse.json(
-      { message: 'Billboard has been successfully deleted', errorMessage: null, data: null },
+      { message: 'Category has been successfully deleted', errorMessage: null, data: null },
       { status: 200 }
     );
   } catch (error) {
-    console.error(`[BILLBOARD_DELETE]: ${error}`);
+    console.error(`[CATEGORY_DELETE]: ${error}`);
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2014') {
         return NextResponse.json(
           {
             message: null,
-            errorMessage: 'Make sure you removed all products from billboard first',
+            errorMessage: 'Make sure you removed all categories from billboard first',
             data: null
           },
           { status: 500 }
