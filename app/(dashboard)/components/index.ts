@@ -1,5 +1,9 @@
+export { default as BillboardCellAction } from './BillboardCellAction';
 export { default as Billboards } from './Billboards';
 export { default as BillboardsForm } from './BillboardsForm';
+export { default as Categories } from './Categories';
+export { default as CategoryCellAction } from './CategoryCellAction';
+export { default as CategoryForm } from './CategoryForm';
 export { default as MainNavbar } from './MainNavbar';
 export { default as Navbar } from './Navbar';
 export { default as SettingsForm } from './SettingsForm';

@@ -7,8 +7,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Trash } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import { removeImage, deleteBillboard, upsertBillboard } from '../services';
-import { type IBillboard } from '@/app/core/interfaces';
+import { upsertCategory, deleteCategory } from '../services';
+import { IBillboard, ICategory } from '@/app/core/interfaces';
 import {
   AlertModal,
   Button,
@@ -19,70 +19,67 @@ import {
   FormItem,
   FormLabel,
   Heading,
-  ImageUpload,
-  Input
+  Input,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
 } from '@/app/shared/components/ui';
 
 interface Props {
-  billboard: IBillboard | null;
+  category: ICategory | null;
+  billboards: IBillboard[];
 }
 
 const formSchema = z.object({
-  label: z.string().min(1),
-  imageUrl: z.string().min(1),
-  imageCode: z.string().min(1)
+  name: z.string().min(1),
+  billboardId: z.string().min(1)
 });
 type FormValues = z.infer<typeof formSchema>;
 
-function BillboardsForm({ billboard }: Props): JSX.Element {
+function CategoryForm({ category, billboards }: Props): JSX.Element {
   const router = useRouter();
   const params = useParams();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = billboard ? 'Edit billboard' : 'Create billboard';
-  const description = billboard ? 'Edit a billboard' : 'Create a billboard';
-  const action = billboard ? 'Save changes' : 'Create';
+  const title = category ? 'Edit category' : 'Create category';
+  const description = category ? 'Edit a category' : 'Create a category';
+  const action = category ? 'Save changes' : 'Create';
 
   const form = useForm<FormValues>({
-    defaultValues: billboard ?? { label: '', imageUrl: '', imageCode: '' },
+    defaultValues: category ?? { name: '', billboardId: '' },
     resolver: zodResolver(formSchema)
   });
 
-  const onSubmit = async ({ label, imageUrl, imageCode }: FormValues): Promise<void> => {
+  const onSubmit = async ({ name, billboardId }: FormValues): Promise<void> => {
     setLoading(true);
-    const { errorMessage, message } = await upsertBillboard(params.id, {
-      id: billboard ? billboard.id : undefined,
-      label,
-      imageUrl,
-      imageCode
+    const { errorMessage, message } = await upsertCategory(params.id, {
+      id: category ? category.id : undefined,
+      name,
+      billboardId
     });
     if (errorMessage) {
       toast.error(errorMessage);
     } else {
       toast.success(message);
       router.refresh();
-      router.push(`/${params.id}/billboards`);
+      router.push(`/${params.id}/categories`);
     }
     setLoading(false);
   };
 
-  const onRemoveImage = async (): Promise<void> => {
-    const imageUrl = form.getValues().imageUrl;
-    const imageCode = form.getValues().imageCode;
-    if (imageUrl && imageCode) await removeImage(imageUrl, imageCode);
-  };
-
   const onDelete = async () => {
     setLoading(true);
-    const { errorMessage, message } = await deleteBillboard(params.id, params.billboardId);
-    await onRemoveImage();
+    const { errorMessage, message } = await deleteCategory(params.id, params.categoryId);
     if (errorMessage) {
       toast.error(errorMessage);
     } else {
       toast.success(message);
-      router.push(`/${params.id}/billboards`);
+      router.refresh();
+      router.push(`/${params.id}/categories`);
     }
     setOpen(false);
     setLoading(false);
@@ -98,7 +95,7 @@ function BillboardsForm({ billboard }: Props): JSX.Element {
       />
       <div className='flex items-center justify-between'>
         <Heading title={title} description={description} />
-        {billboard && (
+        {category && (
           <Button variant='destructive' size='sm' disabled={loading} onClick={() => setOpen(true)}>
             <Trash className='h-4 w-4' />
           </Button>
@@ -109,42 +106,41 @@ function BillboardsForm({ billboard }: Props): JSX.Element {
         <form className='space-y-8 w-full' onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
-            name='label'
+            name='name'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input disabled={loading} placeholder='Billboard name' {...field} />
+                  <Input disabled={loading} placeholder='Category name' {...field} />
                 </FormControl>
               </FormItem>
             )}
           />
           <FormField
             control={form.control}
-            name='imageUrl'
+            name='billboardId'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Background image</FormLabel>
-                <FormControl>
-                  <ImageUpload
-                    values={
-                      field.value
-                        ? [{ imageUrl: field.value, imageCode: form.getValues().imageCode }]
-                        : []
-                    }
-                    disabled={loading}
-                    onChange={async (url, code) => {
-                      await onRemoveImage();
-                      field.onChange(url);
-                      form.setValue('imageCode', code);
-                    }}
-                    onRemove={async () => {
-                      await onRemoveImage();
-                      field.onChange('');
-                      form.setValue('imageCode', '');
-                    }}
-                  />
-                </FormControl>
+                <FormLabel>Billboard</FormLabel>
+                <Select
+                  disabled={loading}
+                  onValueChange={field.onChange}
+                  value={field.value}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue defaultValue={field.value} placeholder='Select a billboard' />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {billboards.map((b) => (
+                      <SelectItem key={b.id} value={b.id}>
+                        {b.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </FormItem>
             )}
           />
@@ -157,4 +153,4 @@ function BillboardsForm({ billboard }: Props): JSX.Element {
     </>
   );
 }
-export default BillboardsForm;
+export default CategoryForm;

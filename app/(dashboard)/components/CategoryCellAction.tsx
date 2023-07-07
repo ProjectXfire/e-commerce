@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import { Copy, Edit, MoreHorizontal, Trash } from 'lucide-react';
-import { deleteBillboard, removeImage } from '@/app/(dashboard)/services';
-import { type IBillboard } from '@/app/core/interfaces';
+import { deleteCategory } from '@/app/(dashboard)/services';
+import { type ICategory } from '@/app/core/interfaces';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -17,10 +17,10 @@ import {
 } from '@/app/shared/components/ui';
 
 interface Props {
-  data: IBillboard;
+  data: ICategory;
 }
 
-function CellAction({ data }: Props): JSX.Element {
+function CategoryCellAction({ data }: Props): JSX.Element {
   const router = useRouter();
   const params = useParams();
 
@@ -33,13 +33,12 @@ function CellAction({ data }: Props): JSX.Element {
   };
 
   const onUpdate = (): void => {
-    router.push(`/${params.id}/billboards/${data.id}`);
+    router.push(`/${params.id}/categories/${data.id}`);
   };
 
   const onDelete = async () => {
     setLoading(true);
-    await removeImage(data.imageUrl, data.imageCode);
-    const { errorMessage, message } = await deleteBillboard(params.id, data.id);
+    const { errorMessage, message } = await deleteCategory(params.id, data.id);
     if (errorMessage) {
       toast.error(errorMessage);
     } else {
@@ -82,4 +81,4 @@ function CellAction({ data }: Props): JSX.Element {
     </>
   );
 }
-export default CellAction;
+export default CategoryCellAction;

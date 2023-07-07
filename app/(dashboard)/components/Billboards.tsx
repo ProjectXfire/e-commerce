@@ -2,13 +2,29 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { Plus } from 'lucide-react';
+import { type ColumnDef } from '@tanstack/react-table';
 import { type IBillboard } from '@/app/core/interfaces';
-import { billboardColumn } from '@/app/shared/utilities';
 import { ApiList, Button, DataTable, Divider, Heading } from '@/app/shared/components/ui';
+import BillboardCellAction from './BillboardCellAction';
 
 interface Props {
   billboards: IBillboard[];
 }
+
+export const billboardColumn: ColumnDef<IBillboard>[] = [
+  {
+    accessorKey: 'label',
+    header: 'Label'
+  },
+  {
+    accessorKey: 'createdAt',
+    header: 'Date'
+  },
+  {
+    id: 'actions',
+    cell: ({ row }) => <BillboardCellAction data={row.original} />
+  }
+];
 
 function Billboards({ billboards }: Props): JSX.Element {
   const router = useRouter();
