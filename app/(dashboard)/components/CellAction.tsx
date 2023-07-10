@@ -4,8 +4,19 @@ import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import { Copy, Edit, MoreHorizontal, Trash } from 'lucide-react';
-import { deleteBillboard, deleteCategory, deleteSize } from '@/app/(dashboard)/services';
-import { type IBillboard, type ISize, type ICategory } from '@/app/core/interfaces';
+import {
+  deleteBillboard,
+  deleteCategory,
+  deleteProduct,
+  deleteSize
+} from '@/app/(dashboard)/services';
+import {
+  type IBillboard,
+  type ISize,
+  type ICategory,
+  IColor,
+  IProduct
+} from '@/app/core/interfaces';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -18,8 +29,8 @@ import {
 import { deleteColor } from '../services/Color';
 
 interface Props {
-  data: ICategory | IBillboard | ISize;
-  paramKey: 'categories' | 'billboards' | 'sizes' | 'colors';
+  data: ICategory | IBillboard | ISize | IColor | IProduct;
+  paramKey: 'categories' | 'billboards' | 'sizes' | 'colors' | 'products';
 }
 
 function CellAction({ data, paramKey }: Props): JSX.Element {
@@ -43,7 +54,13 @@ function CellAction({ data, paramKey }: Props): JSX.Element {
     let _errorMessage = null;
     let _message = null;
     if (paramKey === 'billboards') {
-      const res = await deleteBillboard(params.id, data.id);
+      const billboard = data as IBillboard;
+      const res = await deleteBillboard(
+        params.id,
+        billboard.id,
+        billboard.imageUrl,
+        billboard.imageCode
+      );
       _errorMessage = res.errorMessage;
       _message = res.message;
     }
@@ -59,6 +76,13 @@ function CellAction({ data, paramKey }: Props): JSX.Element {
     }
     if (paramKey === 'colors') {
       const res = await deleteColor(params.id, data.id);
+      _errorMessage = res.errorMessage;
+      _message = res.message;
+    }
+    if (paramKey === 'products') {
+      const product = data as IProduct;
+      const images = product.images?.map((img) => ({ secure_url: img.url, public_id: img.code }));
+      const res = await deleteProduct(params.id, product.id, images);
       _errorMessage = res.errorMessage;
       _message = res.message;
     }

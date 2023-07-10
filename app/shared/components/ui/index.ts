@@ -19,3 +19,4 @@ export * from './DropdownMenu';
 export { default as ApiList } from './ApiList';
 export { default as CustomDropdownMenu } from './CustomDropdownMenu';
 export * from './Select';
+export * from './Checkbox';

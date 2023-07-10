@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import prismaDb from '@/lib/prismadb';
 import { auth } from '@clerk/nextjs';
-import { type ISize } from '@/app/core/interfaces';
+import { type Size } from '@prisma/client';
 import { type IParams, type IResponse } from '@/app/shared/interfaces';
 
 export async function POST(
   req: Request,
   { params }: { params: IParams }
-): Promise<NextResponse<IResponse<ISize | null>>> {
+): Promise<NextResponse<IResponse<Size | null>>> {
   try {
     const { userId } = auth();
     if (!userId)
@@ -53,7 +53,7 @@ export async function POST(
 export async function GET(
   req: Request,
   { params }: { params: { storeId: string } }
-): Promise<NextResponse<IResponse<ISize[]>>> {
+): Promise<NextResponse<IResponse<Size[]>>> {
   try {
     const { storeId } = params;
     if (!storeId)

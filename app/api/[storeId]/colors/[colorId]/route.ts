@@ -1,14 +1,13 @@
 import { NextResponse } from 'next/server';
-import { Prisma } from '@prisma/client';
 import { auth } from '@clerk/nextjs';
 import prismaDb from '@/lib/prismadb';
+import { type Color, Prisma } from '@prisma/client';
 import { type IParams, type IResponse } from '@/app/shared/interfaces';
-import { type IColor } from '@/app/core/interfaces';
 
 export async function GET(
   req: Request,
   { params }: { params: IParams }
-): Promise<NextResponse<IResponse<IColor | null>>> {
+): Promise<NextResponse<IResponse<Color | null>>> {
   try {
     const { colorId } = params;
     if (!colorId)

@@ -6,7 +6,7 @@ interface Props {
   params: IParams;
 }
 
-async function BillboardNewPage({ params }: Props): Promise<JSX.Element> {
+async function SizePage({ params }: Props): Promise<JSX.Element> {
   const size = await prismaDb.size.findUnique({ where: { id: params.sizeId } });
 
   return (
@@ -15,4 +15,4 @@ async function BillboardNewPage({ params }: Props): Promise<JSX.Element> {
     </div>
   );
 }
-export default BillboardNewPage;
+export default SizePage;

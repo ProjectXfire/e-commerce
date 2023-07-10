@@ -5,4 +5,6 @@ export interface IParams {
   categoryId?: string;
   sizeId?: string;
   colorId?: string;
+  productId?: string;
+  imageId?: string;
 }

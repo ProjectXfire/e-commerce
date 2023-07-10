@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import prismaDb from '@/lib/prismadb';
 import { auth } from '@clerk/nextjs';
-import { type Color } from '@prisma/client';
+import { type Product } from '@prisma/client';
 import { type IParams, type IResponse } from '@/app/shared/interfaces';
 
 export async function POST(
   req: Request,
   { params }: { params: IParams }
-): Promise<NextResponse<IResponse<Color | null>>> {
+): Promise<NextResponse<IResponse<Product | null>>> {
   try {
     const { userId } = auth();
     if (!userId)
@@ -28,21 +28,42 @@ export async function POST(
         { status: 400 }
       );
     const body = await req.json();
-    const { name, value } = body;
-    if (!name || !value)
+    const { name, price, categoryId, colorId, sizeId, isArchived, isFeatured, images } = body;
+    if (
+      !name ||
+      price === undefined ||
+      !categoryId ||
+      !colorId ||
+      !sizeId ||
+      isArchived === undefined ||
+      isFeatured === undefined ||
+      (!images && images.length === 0)
+    )
       return NextResponse.json(
         { message: null, errorMessage: 'Some fields are missing', data: null },
         { status: 400 }
       );
-    const color = await prismaDb.color.create({
-      data: { name, value, storeId }
+    const product = await prismaDb.product.create({
+      data: {
+        name,
+        price,
+        categoryId,
+        sizeId,
+        colorId,
+        storeId,
+        isArchived,
+        isFeatured,
+        images: {
+          createMany: { data: images }
+        }
+      }
     });
     return NextResponse.json(
-      { message: 'Color created successfully', errorMessage: null, data: color },
+      { message: 'Product created successfully', errorMessage: null, data: product },
       { status: 201 }
     );
   } catch (error: any) {
-    console.error(`[COLOR_POST]: ${error}`);
+    console.error(`[PRODUCT_POST]: ${error}`);
     return NextResponse.json(
       { message: null, errorMessage: 'Something get wrong!', data: null },
       { status: 500 }
@@ -53,7 +74,7 @@ export async function POST(
 export async function GET(
   req: Request,
   { params }: { params: { storeId: string } }
-): Promise<NextResponse<IResponse<Color[]>>> {
+): Promise<NextResponse<IResponse<Product[]>>> {
   try {
     const { storeId } = params;
     if (!storeId)
@@ -61,13 +82,37 @@ export async function GET(
         { message: null, errorMessage: 'Store ID is missing', data: [] },
         { status: 400 }
       );
-    const colors = await prismaDb.color.findMany({ where: { storeId } });
+    const { searchParams } = new URL(req.url);
+    const categoryId = searchParams.get('categoryId') || undefined;
+    const colorId = searchParams.get('colorId') || undefined;
+    const sizeId = searchParams.get('sizeId') || undefined;
+    const isFeatured = searchParams.get('isFeatured');
+
+    const products = await prismaDb.product.findMany({
+      where: {
+        storeId,
+        categoryId,
+        colorId,
+        sizeId,
+        isFeatured: isFeatured ? true : undefined,
+        isArchived: false
+      },
+      include: {
+        images: true,
+        color: true,
+        category: true,
+        size: true
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
     return NextResponse.json(
-      { message: 'List gotten successfully', errorMessage: null, data: colors },
+      { message: 'List gotten successfully', errorMessage: null, data: products },
       { status: 201 }
     );
   } catch (error: any) {
-    console.error(`[COLORS_GET]: ${error}`);
+    console.error(`[PRODUCTS_GET]: ${error}`);
     return NextResponse.json(
       { message: null, errorMessage: 'Something get wrong!', data: [] },
       { status: 500 }
