@@ -7,7 +7,7 @@ interface Props {
   params: IParams;
 }
 
-async function SizesPage({ params }: Props): Promise<JSX.Element> {
+async function ColorsPage({ params }: Props): Promise<JSX.Element> {
   const colors = await prismaDb.color.findMany({
     where: { storeId: params.id },
     orderBy: { createdAt: 'asc' }
@@ -24,4 +24,4 @@ async function SizesPage({ params }: Props): Promise<JSX.Element> {
     </main>
   );
 }
-export default SizesPage;
+export default ColorsPage;

@@ -82,6 +82,7 @@ function BillboardsForm({ billboard }: Props): JSX.Element {
       toast.error(errorMessage);
     } else {
       toast.success(message);
+      router.refresh();
       router.push(`/${params.id}/billboards`);
     }
     setOpen(false);

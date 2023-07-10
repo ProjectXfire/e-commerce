@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 import prismaDb from '@/lib/prismadb';
 import { auth } from '@clerk/nextjs';
-import { type IStore } from '@/app/core/interfaces';
+import { type Store } from '@prisma/client';
 import { type IResponse } from '@/app/shared/interfaces';
 
-export async function POST(req: Request): Promise<NextResponse<IResponse<IStore | null>>> {
+export async function POST(req: Request): Promise<NextResponse<IResponse<Store | null>>> {
   try {
     const { userId } = auth();
     if (!userId)

@@ -1,14 +1,13 @@
 import { NextResponse } from 'next/server';
-import { Prisma } from '@prisma/client';
 import { auth } from '@clerk/nextjs';
 import prismaDb from '@/lib/prismadb';
+import { type Category, Prisma } from '@prisma/client';
 import { type IParams, type IResponse } from '@/app/shared/interfaces';
-import { type ICategory } from '@/app/core/interfaces';
 
 export async function GET(
   req: Request,
   { params }: { params: IParams }
-): Promise<NextResponse<IResponse<ICategory | null>>> {
+): Promise<NextResponse<IResponse<Category | null>>> {
   try {
     const { categoryId } = params;
     if (!categoryId)

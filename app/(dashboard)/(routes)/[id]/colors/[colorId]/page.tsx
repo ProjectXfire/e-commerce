@@ -6,7 +6,7 @@ interface Props {
   params: IParams;
 }
 
-async function BillboardNewPage({ params }: Props): Promise<JSX.Element> {
+async function ColorPage({ params }: Props): Promise<JSX.Element> {
   const color = await prismaDb.color.findUnique({ where: { id: params.colorId } });
 
   return (
@@ -15,4 +15,4 @@ async function BillboardNewPage({ params }: Props): Promise<JSX.Element> {
     </div>
   );
 }
-export default BillboardNewPage;
+export default ColorPage;

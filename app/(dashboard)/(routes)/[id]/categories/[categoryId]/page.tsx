@@ -6,7 +6,7 @@ interface Props {
   params: IParams;
 }
 
-async function CategoryNewPage({ params }: Props): Promise<JSX.Element> {
+async function CategoryPage({ params }: Props): Promise<JSX.Element> {
   const category = await prismaDb.category.findUnique({ where: { id: params.categoryId } });
   const billboards = await prismaDb.billboard.findMany({ where: { storeId: params.id } });
 
@@ -16,4 +16,4 @@ async function CategoryNewPage({ params }: Props): Promise<JSX.Element> {
     </div>
   );
 }
-export default CategoryNewPage;
+export default CategoryPage;

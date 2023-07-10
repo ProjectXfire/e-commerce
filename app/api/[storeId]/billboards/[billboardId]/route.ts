@@ -1,14 +1,13 @@
 import { NextResponse } from 'next/server';
-import { Prisma } from '@prisma/client';
 import { auth } from '@clerk/nextjs';
 import prismaDb from '@/lib/prismadb';
+import { type Billboard, Prisma } from '@prisma/client';
 import { type IParams, type IResponse } from '@/app/shared/interfaces';
-import { type IBillboard } from '@/app/core/interfaces';
 
 export async function GET(
   req: Request,
   { params }: { params: IParams }
-): Promise<NextResponse<IResponse<IBillboard | null>>> {
+): Promise<NextResponse<IResponse<Billboard | null>>> {
   try {
     const { billboardId } = params;
     if (!billboardId)

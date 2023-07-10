@@ -1,23 +1,28 @@
 import axios, { type AxiosResponse } from 'axios';
-import { removeImage } from './Images';
 import { type IResponse } from '@/app/shared/interfaces';
-import { type UpsertBillboardDto } from '../dtos';
+import { removeImages, type IImageCloudinary } from './Images';
+import { type UpsertProductDto } from '../dtos';
 
-export async function upsertBillboard(
+export async function upsertProduct(
   id: string,
-  payload: UpsertBillboardDto
+  payload: UpsertProductDto
 ): Promise<IResponse<null>> {
   try {
     let res: AxiosResponse<IResponse<null>, any> | null = null;
     if (payload.id) {
-      const { imageCode, imageUrl, label } = payload;
-      res = await axios.patch<IResponse<null>>(`/api/${id}/billboards/${payload.id}`, {
-        imageCode,
-        imageUrl,
-        label
+      const { name, price, categoryId, colorId, sizeId, isArchived, isFeatured, images } = payload;
+      res = await axios.patch<IResponse<null>>(`/api/${id}/products/${payload.id}`, {
+        name,
+        price,
+        categoryId,
+        colorId,
+        sizeId,
+        isArchived,
+        isFeatured,
+        images
       });
     } else {
-      res = await axios.post<IResponse<null>>(`/api/${id}/billboards`, payload);
+      res = await axios.post<IResponse<null>>(`/api/${id}/products`, payload);
     }
     const { data, errorMessage, message } = res.data;
     if (errorMessage) throw new Error(errorMessage);
@@ -35,15 +40,14 @@ export async function upsertBillboard(
   }
 }
 
-export async function deleteBillboard(
+export async function deleteProduct(
   id: string,
-  billboardId: string,
-  secure_url?: string,
-  public_id?: string
+  productId: string,
+  images?: IImageCloudinary[]
 ): Promise<IResponse<null>> {
   try {
-    if (secure_url && public_id) await removeImage(secure_url, public_id);
-    const res = await axios.delete<IResponse<null>>(`/api/${id}/billboards/${billboardId}`);
+    if (images && images.length > 0) await removeImages(images);
+    const res = await axios.delete<IResponse<null>>(`/api/${id}/products/${productId}`);
     const { data, errorMessage, message } = res.data;
     if (errorMessage) throw new Error(errorMessage);
     return {
