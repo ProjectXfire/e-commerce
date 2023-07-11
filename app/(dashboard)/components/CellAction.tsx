@@ -90,8 +90,8 @@ function CellAction({ data, paramKey }: Props): JSX.Element {
       toast.error(_errorMessage);
     } else {
       toast.success(_message);
-      router.refresh();
     }
+    router.refresh();
     setLoading(false);
   };
 

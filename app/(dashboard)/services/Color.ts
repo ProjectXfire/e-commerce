@@ -1,4 +1,5 @@
 import axios, { type AxiosResponse } from 'axios';
+import { handleError } from '@/app/shared/utils';
 import { type IResponse } from '@/app/shared/interfaces';
 import { type UpsertColorDto } from '../dtos';
 
@@ -24,7 +25,7 @@ export async function upsertColor(id: string, payload: UpsertColorDto): Promise<
   } catch (error: any) {
     return {
       data: null,
-      errorMessage: error.message,
+      errorMessage: handleError(error),
       message: null
     };
   }
@@ -43,7 +44,7 @@ export async function deleteColor(id: string, colorId: string): Promise<IRespons
   } catch (error: any) {
     return {
       data: null,
-      errorMessage: error.message,
+      errorMessage: handleError(error),
       message: null
     };
   }

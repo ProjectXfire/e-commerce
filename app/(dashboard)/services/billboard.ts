@@ -1,4 +1,5 @@
 import axios, { type AxiosResponse } from 'axios';
+import { handleError } from '@/app/shared/utils';
 import { removeImage } from './Images';
 import { type IResponse } from '@/app/shared/interfaces';
 import { type UpsertBillboardDto } from '../dtos';
@@ -29,7 +30,7 @@ export async function upsertBillboard(
   } catch (error: any) {
     return {
       data: null,
-      errorMessage: error.message,
+      errorMessage: handleError(error),
       message: null
     };
   }
@@ -54,7 +55,7 @@ export async function deleteBillboard(
   } catch (error: any) {
     return {
       data: null,
-      errorMessage: error.message,
+      errorMessage: handleError(error),
       message: null
     };
   }

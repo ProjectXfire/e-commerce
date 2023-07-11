@@ -111,7 +111,7 @@ export async function DELETE(
         return NextResponse.json(
           {
             message: null,
-            errorMessage: 'Make sure you removed all categories from billboard first',
+            errorMessage: 'Make sure you removed all categories from products first',
             data: null
           },
           { status: 500 }

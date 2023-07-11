@@ -61,7 +61,10 @@ export async function GET(
         { message: null, errorMessage: 'Store ID is missing', data: [] },
         { status: 400 }
       );
-    const categories = await prismaDb.category.findMany({ where: { storeId } });
+    const categories = await prismaDb.category.findMany({
+      where: { storeId },
+      include: { billboard: true }
+    });
     return NextResponse.json(
       { message: 'List gotten successfully', errorMessage: null, data: categories },
       { status: 201 }

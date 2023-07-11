@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { handleError } from '@/app/shared/utils';
 import { type IResponse } from '@/app/shared/interfaces';
 
 export async function updateStore(id: string, name: string): Promise<IResponse<null>> {
@@ -14,7 +15,7 @@ export async function updateStore(id: string, name: string): Promise<IResponse<n
   } catch (error: any) {
     return {
       data: null,
-      errorMessage: error.message,
+      errorMessage: handleError(error),
       message: null
     };
   }
@@ -33,7 +34,7 @@ export async function deleteStore(id: string): Promise<IResponse<null>> {
   } catch (error: any) {
     return {
       data: null,
-      errorMessage: error.message,
+      errorMessage: handleError(error),
       message: null
     };
   }

@@ -1,6 +1,7 @@
 import axios, { type AxiosResponse } from 'axios';
 import { type IResponse } from '@/app/shared/interfaces';
 import { type UpsertCategoryDto } from '../dtos';
+import { handleError } from '@/app/shared/utils';
 
 export async function upsertCategory(
   id: string,
@@ -27,7 +28,7 @@ export async function upsertCategory(
   } catch (error: any) {
     return {
       data: null,
-      errorMessage: error.message,
+      errorMessage: handleError(error),
       message: null
     };
   }
@@ -46,7 +47,7 @@ export async function deleteCategory(id: string, categoryId: string): Promise<IR
   } catch (error: any) {
     return {
       data: null,
-      errorMessage: error.message,
+      errorMessage: handleError(error),
       message: null
     };
   }
