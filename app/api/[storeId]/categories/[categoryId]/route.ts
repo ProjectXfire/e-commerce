@@ -15,7 +15,10 @@ export async function GET(
         { message: null, errorMessage: 'Category ID is required', data: null },
         { status: 400 }
       );
-    const category = await prismaDb.category.findUnique({ where: { id: categoryId } });
+    const category = await prismaDb.category.findUnique({
+      where: { id: categoryId },
+      include: { billboard: true }
+    });
     return NextResponse.json(
       { message: 'Category gotten successfully', errorMessage: null, data: category },
       { status: 200 }
