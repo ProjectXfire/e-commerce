@@ -8,7 +8,7 @@ export interface IOrder {
   storeId: string;
   createdAt: string | Date;
   updatedAt: string | Date;
-  orderItems: string;
+  orderItems?: IOrderItem[] | string;
   totalPrice: string;
 }
 

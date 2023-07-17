@@ -1,4 +1,6 @@
-import { useParams, useRouter } from 'next/navigation';
+'use client';
+
+import { useParams } from 'next/navigation';
 import { useOrigin } from '../../hooks';
 import ApiAlert from './ApiAlert';
 

@@ -8,6 +8,7 @@ export { default as Colors } from './Colors';
 export { default as MainNavbar } from './MainNavbar';
 export { default as Navbar } from './Navbar';
 export { default as Orders } from './Orders';
+export { default as Overview } from './Overview';
 export { default as ProductForm } from './ProductForm';
 export { default as Products } from './Products';
 export { default as SettingsForm } from './SettingsForm';
